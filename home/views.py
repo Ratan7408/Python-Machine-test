@@ -1,92 +1,106 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
 def home(request):
-    """Home page view using template"""
+    """Home page view"""
     return render(request, 'home/home.html')
 
 def welcome(request):
-    """Simple welcome page with hardcoded HTML"""
-    return HttpResponse("""
+    """Welcome page with hardcoded HTML"""
+    html_content = """
     <!DOCTYPE html>
-    <html lang="en">
+    <html>
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Welcome to Django REST API</title>
+        <title>Django REST API - Welcome</title>
         <style>
-            body {
-                font-family: Arial, sans-serif;
-                max-width: 800px;
-                margin: 0 auto;
-                padding: 20px;
-                background-color: #f5f5f5;
-            }
-            .container {
-                background-color: white;
-                padding: 30px;
-                border-radius: 10px;
-                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            }
-            h1 {
-                color: #333;
-                text-align: center;
-                margin-bottom: 30px;
-            }
-            .nav-links {
-                text-align: center;
-                margin: 20px 0;
-            }
-            .nav-links a {
-                display: inline-block;
-                margin: 10px;
-                padding: 10px 20px;
-                background-color: #007bff;
-                color: white;
-                text-decoration: none;
-                border-radius: 5px;
-                transition: background-color 0.3s;
-            }
-            .nav-links a:hover {
-                background-color: #0056b3;
-            }
-            .info {
-                background-color: #e9ecef;
-                padding: 20px;
-                border-radius: 5px;
-                margin: 20px 0;
-            }
+            body { font-family: Arial, sans-serif; margin: 40px; }
+            .container { max-width: 800px; margin: 0 auto; }
+            .header { background: #007bff; color: white; padding: 20px; border-radius: 5px; }
+            .section { margin: 20px 0; padding: 20px; border: 1px solid #ddd; border-radius: 5px; }
+            .endpoint { background: #f8f9fa; padding: 10px; margin: 10px 0; border-radius: 3px; }
+            code { background: #e9ecef; padding: 2px 4px; border-radius: 3px; }
         </style>
     </head>
     <body>
         <div class="container">
-            <h1>🎉 Django REST API Project</h1>
-            
-            <div class="nav-links">
-                <a href="/admin/">🔧 Admin Panel</a>
-                <a href="/api/clients/">👥 Clients API</a>
-                <a href="/api/projects/">📋 Projects API</a>
+            <div class="header">
+                <h1>🚀 Django REST API Project</h1>
+                <p>Welcome to your Django REST API with Clients and Projects management</p>
             </div>
             
-            <div class="info">
-                <h3>🚀 Your Django REST API is Ready!</h3>
-                <p>This project implements a complete REST API system for managing Users, Clients, and Projects.</p>
-                <ul>
-                    <li><strong>Users:</strong> Use Django's built-in User model and admin panel</li>
-                    <li><strong>Clients:</strong> Full CRUD operations via REST API</li>
-                    <li><strong>Projects:</strong> Create projects and assign users</li>
-                    <li><strong>Authentication:</strong> Session-based authentication</li>
-                </ul>
+            <div class="section">
+                <h2>📋 Available Endpoints</h2>
+                
+                <div class="endpoint">
+                    <h3>🏠 Home Page</h3>
+                    <code>GET /</code> - This welcome page
+                </div>
+                
+                <div class="endpoint">
+                    <h3>⚙️ Admin Panel</h3>
+                    <code>GET /admin/</code> - Django admin interface<br>
+                    <strong>Username:</strong> admin<br>
+                    <strong>Password:</strong> admin
+                </div>
+                
+                <div class="endpoint">
+                    <h3>👥 Clients API</h3>
+                    <code>GET /api/clients/</code> - List all clients<br>
+                    <code>POST /api/clients/</code> - Create new client<br>
+                    <code>GET /api/clients/{id}/</code> - Get specific client<br>
+                    <code>PUT /api/clients/{id}/</code> - Update client<br>
+                    <code>DELETE /api/clients/{id}/</code> - Delete client
+                </div>
+                
+                <div class="endpoint">
+                    <h3>📁 Projects API</h3>
+                    <code>GET /api/projects/</code> - List user's projects<br>
+                    <code>POST /api/clients/{client_id}/projects/</code> - Create project for client
+                </div>
+                
+                <div class="endpoint">
+                    <h3>💚 Health Check</h3>
+                    <code>GET /health/</code> - API health status
+                </div>
             </div>
             
-            <div class="info">
-                <h3>📋 Quick Links:</h3>
+            <div class="section">
+                <h2>🔧 API Usage Examples</h2>
+                
+                <h3>Create a Client:</h3>
+                <pre><code>curl -X POST http://localhost:8000/api/clients/ \\
+  -H "Content-Type: application/json" \\
+  -d '{"client_name": "Tech Corp"}'</code></pre>
+                
+                <h3>Create a Project:</h3>
+                <pre><code>curl -X POST http://localhost:8000/api/clients/1/projects/ \\
+  -H "Content-Type: application/json" \\
+  -d '{"project_name": "Website Redesign"}'</code></pre>
+            </div>
+            
+            <div class="section">
+                <h2>🚀 Deployment</h2>
+                <p>This project is configured for deployment on Vercel with:</p>
                 <ul>
-                    <li><strong>Admin Panel:</strong> <a href="/admin/">http://127.0.0.1:8000/admin/</a></li>
-                    <li><strong>API Base URL:</strong> <code>http://127.0.0.1:8000/api/</code></li>
+                    <li>✅ Django REST Framework</li>
+                    <li>✅ SQLite database</li>
+                    <li>✅ Static file handling</li>
+                    <li>✅ Admin interface</li>
+                    <li>✅ API authentication</li>
                 </ul>
             </div>
         </div>
     </body>
     </html>
-    """)
+    """
+    return JsonResponse({'message': 'Welcome to Django REST API', 'html': html_content})
+
+@csrf_exempt
+def health_check(request):
+    """Health check endpoint for Vercel"""
+    return JsonResponse({
+        'status': 'healthy',
+        'message': 'Django REST API is running',
+        'version': '1.0.0'
+    })

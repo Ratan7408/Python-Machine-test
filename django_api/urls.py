@@ -21,6 +21,7 @@ from projects import views as project_views
 
 urlpatterns = [
     path('', home_views.home, name='home'),     # Home page using template
+    path('health/', home_views.health_check, name='health_check'),  # Health check for Vercel
     path('admin/', admin.site.urls),       # Admin panel
     
     # API endpoints
