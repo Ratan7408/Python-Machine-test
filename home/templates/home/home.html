@@ -5,179 +5,103 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Django REST API - Python Machine Test</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
+            margin: 0;
+            padding: 0;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
         }
-        
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
         }
-        
         .header {
-            text-align: center;
-            color: white;
-            margin-bottom: 40px;
-        }
-        
-        .header h1 {
-            font-size: 3rem;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-        
-        .header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
-        
-        .main-content {
-            background: white;
-            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.95);
             padding: 40px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            margin-bottom: 30px;
-        }
-        
-        .nav-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 40px;
-            flex-wrap: wrap;
-        }
-        
-        .nav-btn {
-            display: inline-block;
-            padding: 15px 30px;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
-            text-decoration: none;
-            border-radius: 25px;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-        
-        .nav-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-        }
-        
-        .section {
-            margin-bottom: 40px;
-        }
-        
-        .section h2 {
-            color: #667eea;
-            margin-bottom: 20px;
-            font-size: 2rem;
-            border-bottom: 3px solid #667eea;
-            padding-bottom: 10px;
-        }
-        
-        .api-endpoint {
-            background: #f8f9fa;
-            border-left: 4px solid #667eea;
-            padding: 20px;
-            margin: 15px 0;
-            border-radius: 5px;
-        }
-        
-        .method {
-            display: inline-block;
-            padding: 5px 12px;
             border-radius: 15px;
-            font-weight: bold;
-            font-size: 0.9rem;
-            margin-right: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            text-align: center;
         }
-        
-        .get { background: #28a745; color: white; }
-        .post { background: #007bff; color: white; }
-        .put { background: #ffc107; color: black; }
-        .patch { background: #17a2b8; color: white; }
-        .delete { background: #dc3545; color: white; }
-        
-        .endpoint-url {
-            font-family: 'Courier New', monospace;
-            background: #e9ecef;
-            padding: 8px 12px;
-            border-radius: 5px;
-            color: #495057;
-            font-weight: bold;
+        .header h1 {
+            color: #333;
+            margin: 0 0 10px 0;
+            font-size: 2.5em;
         }
-        
-        .description {
-            margin-top: 10px;
-            color: #6c757d;
+        .header p {
+            color: #666;
+            font-size: 1.2em;
+            margin: 0;
         }
-        
-        .example {
-            background: #f8f9fa;
-            border: 1px solid #dee2e6;
-            border-radius: 5px;
-            padding: 15px;
-            margin: 10px 0;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
-        }
-        
-        .features {
+        .content {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 20px;
-            margin: 30px 0;
+            margin-bottom: 30px;
         }
-        
-        .feature-card {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
+        .card {
+            background: rgba(255, 255, 255, 0.95);
             padding: 25px;
-            border-radius: 10px;
-            text-align: center;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
-        
-        .feature-card h3 {
-            margin-bottom: 15px;
-            font-size: 1.5rem;
+        .card h2 {
+            color: #333;
+            margin-top: 0;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
         }
-        
-        .feature-card p {
-            opacity: 0.9;
+        .endpoint {
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
         }
-        
-        .footer {
-            text-align: center;
+        .endpoint strong {
+            color: #667eea;
+        }
+        .status {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .status.deployed {
+            background: #d4edda;
+            color: #155724;
+        }
+        .status.local {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #667eea;
             color: white;
-            margin-top: 40px;
-            opacity: 0.8;
+            text-decoration: none;
+            border-radius: 8px;
+            margin: 5px;
+            transition: background 0.3s;
         }
-        
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 2rem;
-            }
-            
-            .nav-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .main-content {
-                padding: 20px;
-            }
+        .btn:hover {
+            background: #5a6fd8;
+        }
+        .features {
+            list-style: none;
+            padding: 0;
+        }
+        .features li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .features li:before {
+            content: "✅ ";
+            margin-right: 10px;
         }
     </style>
 </head>
@@ -185,141 +109,96 @@
     <div class="container">
         <div class="header">
             <h1>🚀 Django REST API</h1>
-            <p>Python Machine Test - Complete REST API System</p>
+            <p>Python Machine Test Project</p>
+            <div class="status deployed">✅ Successfully Deployed on Vercel</div>
         </div>
-        
-        <div class="main-content">
-            <div class="nav-buttons">
-                <a href="/admin/" class="nav-btn">🔧 Admin Panel</a>
-                <a href="/api/clients/" class="nav-btn">👥 Clients API</a>
-                <a href="/api/projects/" class="nav-btn">📋 Projects API</a>
-            </div>
-            
-            <div class="section">
-                <h2>📋 API Endpoints</h2>
-                
-                <div class="api-endpoint">
-                    <span class="method get">GET</span>
-                    <span class="endpoint-url">/api/clients/</span>
-                    <div class="description">List all clients</div>
-                </div>
-                
-                <div class="api-endpoint">
-                    <span class="method post">POST</span>
-                    <span class="endpoint-url">/api/clients/</span>
-                    <div class="description">Create a new client</div>
-                    <div class="example">
-{
-  "client_name": "Example Client"
-}
-                    </div>
-                </div>
-                
-                <div class="api-endpoint">
-                    <span class="method get">GET</span>
-                    <span class="endpoint-url">/api/clients/{id}/</span>
-                    <div class="description">Get client details with projects</div>
-                </div>
-                
-                <div class="api-endpoint">
-                    <span class="method put">PUT</span>
-                    <span class="endpoint-url">/api/clients/{id}/</span>
-                    <div class="description">Update client (full update)</div>
-                </div>
-                
-                <div class="api-endpoint">
-                    <span class="method patch">PATCH</span>
-                    <span class="endpoint-url">/api/clients/{id}/</span>
-                    <div class="description">Update client (partial update)</div>
-                </div>
-                
-                <div class="api-endpoint">
-                    <span class="method delete">DELETE</span>
-                    <span class="endpoint-url">/api/clients/{id}/</span>
-                    <div class="description">Delete a client</div>
-                </div>
-                
-                <div class="api-endpoint">
-                    <span class="method get">GET</span>
-                    <span class="endpoint-url">/api/projects/</span>
-                    <div class="description">List projects assigned to logged-in user</div>
-                </div>
-                
-                <div class="api-endpoint">
-                    <span class="method post">POST</span>
-                    <span class="endpoint-url">/api/clients/{client_id}/projects/</span>
-                    <div class="description">Create a new project for a specific client</div>
-                    <div class="example">
-{
-  "project_name": "Example Project",
-  "users": [1, 2, 3]
-}
-                    </div>
-                </div>
-            </div>
-            
-            <div class="section">
-                <h2>✨ Features</h2>
-                <div class="features">
-                    <div class="feature-card">
-                        <h3>👥 User Management</h3>
-                        <p>Built-in Django User model with admin panel for user management</p>
-                    </div>
-                    <div class="feature-card">
-                        <h3>🏢 Client Management</h3>
-                        <p>Complete CRUD operations for clients via REST API</p>
-                    </div>
-                    <div class="feature-card">
-                        <h3>📋 Project Management</h3>
-                        <p>Create projects and assign multiple users to projects</p>
-                    </div>
-                    <div class="feature-card">
-                        <h3>🔐 Authentication</h3>
-                        <p>Session-based authentication for secure API access</p>
-                    </div>
-                    <div class="feature-card">
-                        <h3>📊 Admin Interface</h3>
-                        <p>Django admin panel for easy data management</p>
-                    </div>
-                    <div class="feature-card">
-                        <h3>🚀 REST API</h3>
-                        <p>Full REST API with JSON input/output</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="section">
-                <h2>🔧 Quick Start</h2>
-                <div class="example">
-# Default Admin User
-Username: admin
-Password: admin123
 
-# Test Users (if created)
-Username: rohit, ganesh, priya, amit
-Password: test123
+        <div class="content">
+            <div class="card">
+                <h2>📋 Project Overview</h2>
+                <p>This is a Django REST API project that manages Users, Clients, and Projects with the following features:</p>
+                <ul class="features">
+                    <li>Django REST Framework for API endpoints</li>
+                    <li>User authentication and authorization</li>
+                    <li>Client management system</li>
+                    <li>Project management with client associations</li>
+                    <li>Admin panel for data management</li>
+                    <li>RESTful API design</li>
+                    <li>Deployed on Vercel serverless platform</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h2>🔗 Available Endpoints</h2>
+                <div class="endpoint">
+                    <strong>GET /</strong> - Home page (this page)
                 </div>
-                
-                <h3>API Testing:</h3>
-                <div class="example">
-# Get all clients
-curl -X GET http://127.0.0.1:8000/api/clients/
-
-# Create a client
-curl -X POST http://127.0.0.1:8000/api/clients/ \
-  -H "Content-Type: application/json" \
-  -d '{"client_name": "New Client"}'
-
-# Create a project for client
-curl -X POST http://127.0.0.1:8000/api/clients/1/projects/ \
-  -H "Content-Type: application/json" \
-  -d '{"project_name": "New Project", "users": [1, 2]}'
+                <div class="endpoint">
+                    <strong>GET /health/</strong> - Health check endpoint
+                </div>
+                <div class="endpoint">
+                    <strong>GET /api/status/</strong> - API status and database connectivity
+                </div>
+                <div class="endpoint">
+                    <strong>GET /admin/</strong> - Django admin panel
+                </div>
+                <div class="endpoint">
+                    <strong>GET /api/clients/</strong> - List all clients
+                </div>
+                <div class="endpoint">
+                    <strong>POST /api/clients/</strong> - Create new client
+                </div>
+                <div class="endpoint">
+                    <strong>GET /api/projects/</strong> - List all projects
+                </div>
+                <div class="endpoint">
+                    <strong>POST /api/clients/{id}/projects/</strong> - Create project for client
                 </div>
             </div>
-        </div>
-        
-        <div class="footer">
-            <p>🎯 Django REST API - Python Machine Test | Ready for Vercel Deployment</p>
+
+            <div class="card">
+                <h2>🛠️ Technology Stack</h2>
+                <ul class="features">
+                    <li><strong>Backend:</strong> Django 5.1.5</li>
+                    <li><strong>API Framework:</strong> Django REST Framework</li>
+                    <li><strong>Database:</strong> SQLite (local) / PostgreSQL (production)</li>
+                    <li><strong>Deployment:</strong> Vercel Serverless</li>
+                    <li><strong>Static Files:</strong> WhiteNoise</li>
+                    <li><strong>Authentication:</strong> Django Session Auth</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h2>📁 Project Structure</h2>
+                <ul class="features">
+                    <li><strong>django_api/</strong> - Main project configuration</li>
+                    <li><strong>home/</strong> - Home app with views and templates</li>
+                    <li><strong>clients/</strong> - Client management app</li>
+                    <li><strong>projects/</strong> - Project management app</li>
+                    <li><strong>manage.py</strong> - Django management script</li>
+                    <li><strong>requirements.txt</strong> - Python dependencies</li>
+                    <li><strong>vercel.json</strong> - Vercel deployment config</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h2>🔐 Admin Access</h2>
+                <p>For local development, you can access the admin panel with:</p>
+                <ul class="features">
+                    <li><strong>Username:</strong> admin</li>
+                    <li><strong>Password:</strong> admin123</li>
+                </ul>
+                <a href="/admin/" class="btn">Access Admin Panel</a>
+            </div>
+
+            <div class="card">
+                <h2>🌐 Deployment Status</h2>
+                <div class="status deployed">✅ Live on Vercel</div>
+                <p><strong>URL:</strong> https://python-machine-test.vercel.app/</p>
+                <p><strong>Repository:</strong> <a href="https://github.com/Ratan7408/Python-Machine-test" target="_blank">GitHub</a></p>
+                <a href="/health/" class="btn">Check Health</a>
+                <a href="/api/status/" class="btn">API Status</a>
+            </div>
         </div>
     </div>
 </body>

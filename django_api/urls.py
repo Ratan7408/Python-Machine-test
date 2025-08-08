@@ -18,12 +18,20 @@ from django.contrib import admin
 from django.urls import path, include
 from home import views as home_views
 from projects import views as project_views
+import os
 
 urlpatterns = [
     path('', home_views.home, name='home'),     # Home page using template
     path('health/', home_views.health_check, name='health_check'),  # Health check for Vercel
     path('api/status/', home_views.api_status, name='api_status'),  # API status for Vercel
-    
-    # Note: Admin and database-dependent APIs are disabled for Vercel deployment
-    # as the serverless environment doesn't support persistent SQLite databases
 ]
+
+# Add admin and API endpoints only if not on Vercel or if DATABASE_URL is provided
+if not os.environ.get('VERCEL_ENV') or os.environ.get('DATABASE_URL'):
+    urlpatterns += [
+        path('admin/', admin.site.urls),       # Admin panel
+        # API endpoints
+        path('api/clients/', include('clients.urls')),
+        path('api/projects/', include('projects.urls')),
+        path('api/clients/<int:client_id>/projects/', project_views.create_project_for_client, name='create-project-for-client'),
+    ]

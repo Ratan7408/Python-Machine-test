@@ -3,21 +3,11 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 from django.db import connection
+import os
 
 def home(request):
-    """Home page view - returns JSON for Vercel deployment"""
-    return JsonResponse({
-        'message': 'Welcome to Django REST API',
-        'project': 'Python Machine Test',
-        'status': 'deployed',
-        'platform': 'vercel',
-        'endpoints': {
-            'health': '/health/',
-            'api_status': '/api/status/',
-            'home': '/'
-        },
-        'description': 'Django REST API deployed on Vercel with serverless architecture'
-    })
+    """Home page view - returns template"""
+    return render(request, 'home/home.html')
 
 def welcome(request):
     """Welcome page with hardcoded HTML"""
@@ -32,51 +22,40 @@ def welcome(request):
             .header { background: #007bff; color: white; padding: 20px; border-radius: 5px; }
             .section { margin: 20px 0; padding: 20px; border: 1px solid #ddd; border-radius: 5px; }
             .endpoint { background: #f8f9fa; padding: 10px; margin: 10px 0; border-radius: 3px; }
-            code { background: #e9ecef; padding: 2px 4px; border-radius: 3px; }
         </style>
     </head>
     <body>
         <div class="container">
             <div class="header">
-                <h1>🚀 Django REST API Project</h1>
-                <p>Welcome to your Django REST API with Clients and Projects management</p>
+                <h1>Django REST API</h1>
+                <p>Welcome to the Python Machine Test Project</p>
             </div>
             
             <div class="section">
-                <h2>📋 Available Endpoints</h2>
-                
+                <h2>Available Endpoints</h2>
                 <div class="endpoint">
-                    <h3>🏠 Home Page</h3>
-                    <code>GET /</code> - This welcome page
+                    <strong>GET /api/clients/</strong> - List all clients
                 </div>
-                
                 <div class="endpoint">
-                    <h3>💚 Health Check</h3>
-                    <code>GET /health/</code> - API health status
+                    <strong>POST /api/clients/</strong> - Create a new client
                 </div>
-                
                 <div class="endpoint">
-                    <h3>📊 API Status</h3>
-                    <code>GET /api/status/</code> - Database and API status
+                    <strong>GET /api/projects/</strong> - List all projects
+                </div>
+                <div class="endpoint">
+                    <strong>POST /api/clients/{id}/projects/</strong> - Create project for client
                 </div>
             </div>
             
             <div class="section">
-                <h2>🚀 Deployment</h2>
-                <p>This project is configured for deployment on Vercel with:</p>
-                <ul>
-                    <li>✅ Django REST Framework</li>
-                    <li>✅ Serverless architecture</li>
-                    <li>✅ Static file handling</li>
-                    <li>✅ Health monitoring</li>
-                    <li>✅ API endpoints</li>
-                </ul>
+                <h2>Admin Panel</h2>
+                <p><a href="/admin/">Access Admin Panel</a></p>
             </div>
         </div>
     </body>
     </html>
     """
-    return JsonResponse({'message': 'Welcome to Django REST API', 'html': html_content})
+    return JsonResponse({'html': html_content})
 
 @csrf_exempt
 def health_check(request):
@@ -84,24 +63,23 @@ def health_check(request):
     return JsonResponse({
         'status': 'healthy',
         'message': 'Django REST API is running',
-        'version': '1.0.0',
-        'environment': 'vercel'
+        'timestamp': '2025-08-08T22:00:00Z'
     })
 
 @csrf_exempt
 def api_status(request):
-    """API status endpoint to check database connectivity"""
+    """API status endpoint for Vercel"""
     try:
-        # Test database connection
+        # Try to connect to database
         with connection.cursor() as cursor:
             cursor.execute("SELECT 1")
-            db_status = "connected"
+        db_status = "connected"
     except Exception as e:
         db_status = f"error: {str(e)}"
     
     return JsonResponse({
-        'status': 'operational',
+        'api_status': 'operational',
         'database': db_status,
-        'message': 'API is running on Vercel',
-        'environment': 'serverless'
+        'environment': os.environ.get('VERCEL_ENV', 'local'),
+        'message': 'API endpoints are available'
     })
