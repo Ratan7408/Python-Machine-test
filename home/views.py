@@ -5,8 +5,19 @@ from django.contrib.auth.models import User
 from django.db import connection
 
 def home(request):
-    """Home page view"""
-    return render(request, 'home/home.html')
+    """Home page view - returns JSON for Vercel deployment"""
+    return JsonResponse({
+        'message': 'Welcome to Django REST API',
+        'project': 'Python Machine Test',
+        'status': 'deployed',
+        'platform': 'vercel',
+        'endpoints': {
+            'health': '/health/',
+            'api_status': '/api/status/',
+            'home': '/'
+        },
+        'description': 'Django REST API deployed on Vercel with serverless architecture'
+    })
 
 def welcome(request):
     """Welcome page with hardcoded HTML"""
