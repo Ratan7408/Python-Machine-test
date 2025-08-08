@@ -22,10 +22,8 @@ from projects import views as project_views
 urlpatterns = [
     path('', home_views.home, name='home'),     # Home page using template
     path('health/', home_views.health_check, name='health_check'),  # Health check for Vercel
-    path('admin/', admin.site.urls),       # Admin panel
+    path('api/status/', home_views.api_status, name='api_status'),  # API status for Vercel
     
-    # API endpoints
-    path('api/clients/', include('clients.urls')),
-    path('api/projects/', include('projects.urls')),
-    path('api/clients/<int:client_id>/projects/', project_views.create_project_for_client, name='create-project-for-client'),
+    # Note: Admin and database-dependent APIs are disabled for Vercel deployment
+    # as the serverless environment doesn't support persistent SQLite databases
 ]

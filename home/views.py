@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.models import User
+from django.db import connection
 
 def home(request):
     """Home page view"""
@@ -38,45 +40,14 @@ def welcome(request):
                 </div>
                 
                 <div class="endpoint">
-                    <h3>⚙️ Admin Panel</h3>
-                    <code>GET /admin/</code> - Django admin interface<br>
-                    <strong>Username:</strong> admin<br>
-                    <strong>Password:</strong> admin
-                </div>
-                
-                <div class="endpoint">
-                    <h3>👥 Clients API</h3>
-                    <code>GET /api/clients/</code> - List all clients<br>
-                    <code>POST /api/clients/</code> - Create new client<br>
-                    <code>GET /api/clients/{id}/</code> - Get specific client<br>
-                    <code>PUT /api/clients/{id}/</code> - Update client<br>
-                    <code>DELETE /api/clients/{id}/</code> - Delete client
-                </div>
-                
-                <div class="endpoint">
-                    <h3>📁 Projects API</h3>
-                    <code>GET /api/projects/</code> - List user's projects<br>
-                    <code>POST /api/clients/{client_id}/projects/</code> - Create project for client
-                </div>
-                
-                <div class="endpoint">
                     <h3>💚 Health Check</h3>
                     <code>GET /health/</code> - API health status
                 </div>
-            </div>
-            
-            <div class="section">
-                <h2>🔧 API Usage Examples</h2>
                 
-                <h3>Create a Client:</h3>
-                <pre><code>curl -X POST http://localhost:8000/api/clients/ \\
-  -H "Content-Type: application/json" \\
-  -d '{"client_name": "Tech Corp"}'</code></pre>
-                
-                <h3>Create a Project:</h3>
-                <pre><code>curl -X POST http://localhost:8000/api/clients/1/projects/ \\
-  -H "Content-Type: application/json" \\
-  -d '{"project_name": "Website Redesign"}'</code></pre>
+                <div class="endpoint">
+                    <h3>📊 API Status</h3>
+                    <code>GET /api/status/</code> - Database and API status
+                </div>
             </div>
             
             <div class="section">
@@ -84,10 +55,10 @@ def welcome(request):
                 <p>This project is configured for deployment on Vercel with:</p>
                 <ul>
                     <li>✅ Django REST Framework</li>
-                    <li>✅ SQLite database</li>
+                    <li>✅ Serverless architecture</li>
                     <li>✅ Static file handling</li>
-                    <li>✅ Admin interface</li>
-                    <li>✅ API authentication</li>
+                    <li>✅ Health monitoring</li>
+                    <li>✅ API endpoints</li>
                 </ul>
             </div>
         </div>
@@ -102,5 +73,24 @@ def health_check(request):
     return JsonResponse({
         'status': 'healthy',
         'message': 'Django REST API is running',
-        'version': '1.0.0'
+        'version': '1.0.0',
+        'environment': 'vercel'
+    })
+
+@csrf_exempt
+def api_status(request):
+    """API status endpoint to check database connectivity"""
+    try:
+        # Test database connection
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT 1")
+            db_status = "connected"
+    except Exception as e:
+        db_status = f"error: {str(e)}"
+    
+    return JsonResponse({
+        'status': 'operational',
+        'database': db_status,
+        'message': 'API is running on Vercel',
+        'environment': 'serverless'
     })
